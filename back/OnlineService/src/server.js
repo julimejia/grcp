@@ -16,12 +16,24 @@ const packageDefinition = protoLoader.loadSync(
      oneofs: true
     });
 
-const client = new productService(REMOTE_HOST,grpc.credentials.createInsecure());
+console.info("Consumer service is started...");
 
-client.AddProduct({id_product: idProduct}, (err, data) => {
+const productService = grpc.loadPackageDefinition(packageDefinition).ProductService;
+
+function main(){
+
+  const idProduct = 1;
+  const client = new productService(REMOTE_HOST,grpc.credentials.createInsecure());
+
+  client.AddProduct({id_product: idProduct} , (err, data) => {
+
     if(err){
-      console.log(err);   // Se procesa y visualiza por consola el error.
+      console.log(err);
     } else {
-      console.log('Response received from remote service:', data); // Se procesa y visualiza el mensaje de respuesta recibido.
+      console.log('Response received from remote service:', data); // API response
     }
    });
+
+};
+
+main();
